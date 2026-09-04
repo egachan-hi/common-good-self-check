@@ -1,0 +1,1218 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#52651f" />
+  <title>公共善セルフチェック 3.1</title>
+  <style>
+    :root {
+      --bg: #f5f7f1;
+      --surface: #ffffff;
+      --text: #1f2a24;
+      --muted: #65706a;
+      --line: #dce2d8;
+      --primary: #52651f;
+      --primary-dark: #384714;
+      --accent: #0b8d95;
+      --danger: #a23b3b;
+      --shadow: 0 12px 30px rgba(30, 45, 35, 0.10);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(82,101,31,.12), transparent 32rem),
+        radial-gradient(circle at 100% 25%, rgba(11,141,149,.10), transparent 28rem),
+        var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Noto Sans JP", sans-serif;
+      line-height: 1.65;
+    }
+
+    button, input { font: inherit; }
+    button { touch-action: manipulation; }
+
+    .app-shell {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      padding: 18px 16px max(28px, env(safe-area-inset-bottom));
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      min-height: 48px;
+      margin-bottom: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      box-shadow: var(--shadow);
+      font-size: 15px;
+    }
+
+    .lang-toggle {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.85);
+      color: var(--text);
+      padding: 7px 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .card {
+      background: rgba(255,255,255,.94);
+      border: 1px solid rgba(220,226,216,.95);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(22px, 5vw, 42px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      color: var(--primary-dark);
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 16px;
+      font-size: clamp(30px, 8vw, 52px);
+      line-height: 1.15;
+      letter-spacing: -.035em;
+    }
+    h2 {
+      margin-bottom: 14px;
+      font-size: clamp(24px, 5vw, 34px);
+      line-height: 1.35;
+    }
+    h3 { margin-bottom: 8px; }
+
+    .lead {
+      color: #354039;
+      font-size: clamp(17px, 3.7vw, 20px);
+    }
+
+    .note-box {
+      margin: 24px 0;
+      padding: 16px 17px;
+      border-radius: 14px;
+      background: #f0f4ea;
+      border: 1px solid #dce6d2;
+      color: #374430;
+    }
+
+    .note-box strong { display: block; margin-bottom: 3px; }
+
+    .primary-button, .secondary-button, .ghost-button {
+      width: 100%;
+      min-height: 54px;
+      border-radius: 14px;
+      border: 0;
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+    }
+
+    .primary-button {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      box-shadow: 0 10px 24px rgba(56,71,20,.22);
+    }
+
+    .secondary-button {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent), #086971);
+      box-shadow: 0 10px 24px rgba(8,105,113,.18);
+    }
+
+    .ghost-button {
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .primary-button:hover, .secondary-button:hover, .ghost-button:hover { transform: translateY(-1px); }
+    .primary-button:active, .secondary-button:active, .ghost-button:active { transform: translateY(0); }
+    button:focus-visible, input:focus-visible { outline: 3px solid rgba(11,141,149,.28); outline-offset: 2px; }
+    button:disabled { cursor: not-allowed; opacity: .42; transform: none; box-shadow: none; }
+
+    .progress-wrap { margin-bottom: 18px; }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .progress-track {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e5eae2;
+    }
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width .28s ease;
+    }
+
+    .category-pill {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--category-color, var(--primary));
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .question-title {
+      margin-bottom: 8px;
+      font-size: clamp(23px, 5vw, 32px);
+      line-height: 1.35;
+    }
+    .question-en {
+      margin-bottom: 24px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+      margin: 22px 0 26px;
+    }
+
+    .option {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-height: 58px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      cursor: pointer;
+      transition: border-color .12s ease, background .12s ease, transform .12s ease;
+    }
+    .option:hover { border-color: #aab6a4; transform: translateY(-1px); }
+    .option:has(input:checked) {
+      border-color: var(--accent);
+      background: #edf8f8;
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+    .option input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .radio-dot {
+      flex: 0 0 auto;
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border: 2px solid #aab4ac;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .option:has(input:checked) .radio-dot { border-color: var(--accent); }
+    .option:has(input:checked) .radio-dot::after {
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .option-label { font-weight: 750; }
+    .option-en { display: block; color: var(--muted); font-size: 13px; font-weight: 500; }
+
+    .nav-row {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 10px;
+    }
+
+    .result-score {
+      display: grid;
+      place-items: center;
+      width: min(210px, 64vw);
+      aspect-ratio: 1;
+      margin: 10px auto 24px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, #fff 59%, transparent 60%),
+        conic-gradient(var(--primary) var(--score-angle, 0deg), #e5eae2 0deg);
+      box-shadow: inset 0 0 0 1px var(--line), var(--shadow);
+      text-align: center;
+    }
+    .result-score strong {
+      display: block;
+      font-size: clamp(48px, 14vw, 74px);
+      line-height: 1;
+      letter-spacing: -.05em;
+    }
+    .result-score span { color: var(--muted); font-weight: 700; }
+
+    .result-band {
+      margin: 0 0 24px;
+      padding: 18px;
+      border-left: 6px solid var(--primary);
+      border-radius: 12px;
+      background: #f1f5ec;
+    }
+    .result-band h2 { margin-bottom: 8px; font-size: 24px; }
+    .result-band p:last-child { margin-bottom: 0; }
+
+    .advice-panel {
+      margin: 28px 0 24px;
+      padding: clamp(20px, 4vw, 28px);
+      border: 1px solid #cfd9c8;
+      border-radius: 18px;
+      background:
+        linear-gradient(145deg, rgba(240,245,234,.96), rgba(236,248,247,.96));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+    }
+    .advice-kicker {
+      margin-bottom: 5px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .advice-panel h2 { margin-bottom: 14px; font-size: clamp(23px, 5vw, 30px); }
+    .advice-text {
+      margin-bottom: 18px;
+      color: #29352e;
+      white-space: pre-line;
+      line-height: 1.9;
+    }
+    .next-step-card {
+      display: grid;
+      gap: 5px;
+      margin-top: 16px;
+      padding: 15px 16px;
+      border-left: 5px solid var(--accent);
+      border-radius: 12px;
+      background: rgba(255,255,255,.82);
+    }
+    .next-step-card span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .next-step-card strong { font-size: 17px; line-height: 1.65; }
+    .advice-meta {
+      margin: 12px 2px 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .category-results {
+      display: grid;
+      gap: 14px;
+      margin: 25px 0;
+    }
+    .category-result {
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+    .category-result-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 9px;
+      font-weight: 800;
+    }
+    .category-result-head span:last-child { white-space: nowrap; }
+    .mini-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e8ece6;
+    }
+    .mini-bar { height: 100%; border-radius: inherit; background: var(--category-color); }
+    .score-range { margin-top: 5px; color: var(--muted); font-size: 12px; }
+
+    .result-actions { display: grid; gap: 10px; margin-top: 24px; }
+
+    details {
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+    summary {
+      padding: 14px 16px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    .answer-review { padding: 0 16px 16px; }
+    .answer-row {
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+    .answer-row small { color: var(--muted); }
+
+    .footer-note {
+      margin: 18px 4px 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .hidden { display: none !important; }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(22px, env(safe-area-inset-bottom));
+      z-index: 10;
+      transform: translateX(-50%) translateY(20px);
+      max-width: calc(100% - 32px);
+      padding: 11px 16px;
+      border-radius: 999px;
+      color: #fff;
+      background: #203028;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      text-align: center;
+      font-weight: 700;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 480px) {
+      .app-shell { padding-inline: 12px; }
+      .card { padding: 21px 17px; border-radius: 18px; }
+      .nav-row { grid-template-columns: .9fr 1.25fr; }
+      .brand-text { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand" aria-label="Common Good Self-Check">
+        <div class="brand-mark">CG</div>
+        <span class="brand-text" id="brandText">公共善セルフチェック</span>
+      </div>
+      <button type="button" class="lang-toggle" id="langToggle" aria-label="表示言語を切り替える">EN</button>
+    </header>
+
+    <section id="startScreen" class="card">
+      <div class="eyebrow" id="startEyebrow">Common Good Self-Check 3.1</div>
+      <h1 id="startTitle">公共善への貢献を<br>振り返る25の問い</h1>
+      <p class="lead" id="startLead">過去12か月の行動について、もっとも近い回答を選んでください。正解・不正解はありません。</p>
+      <div class="note-box">
+        <strong id="privacyTitle">回答はこの端末内だけで処理されます</strong>
+        <span id="privacyText">この試作版は回答を外部に送信・保存しません。所要時間の目安は5〜8分です。</span>
+      </div>
+      <button type="button" class="primary-button" id="startButton">セルフチェックを始める</button>
+      <p class="footer-note" id="startCredit">日本語は本アプリ用の仮訳です。公開利用の前に、原資料の利用・翻訳条件をご確認ください。</p>
+    </section>
+
+    <section id="questionScreen" class="card hidden" aria-live="polite">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="progressLabel">1 / 25</span>
+          <span id="progressPercent">4%</span>
+        </div>
+        <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
+
+      <div class="category-pill" id="categoryPill">人間の尊厳</div>
+      <h2 class="question-title" id="questionTitle"></h2>
+      <p class="question-en" id="questionEnglish"></p>
+      <form id="answerForm">
+        <div class="options" id="options"></div>
+        <div class="nav-row">
+          <button type="button" class="ghost-button" id="backButton">戻る</button>
+          <button type="submit" class="primary-button" id="nextButton" disabled>次へ</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="resultScreen" class="card hidden">
+      <div class="eyebrow" id="resultEyebrow">Your result</div>
+      <h1 id="resultTitle">セルフチェック結果</h1>
+      <div class="result-score" id="resultScoreRing">
+        <div><strong id="totalScore">0</strong><span id="scoreUnit">点 / 100点</span></div>
+      </div>
+      <div class="result-band" id="resultBand">
+        <h2 id="bandTitle"></h2>
+        <p id="bandText"></p>
+      </div>
+
+      <h2 id="categoryResultTitle">5領域の結果</h2>
+      <div class="category-results" id="categoryResults"></div>
+
+      <section class="advice-panel" aria-labelledby="adviceTitle">
+        <div class="advice-kicker" id="adviceKicker">Next step</div>
+        <h2 id="adviceTitle">公共善的な日常生活へのアドバイス</h2>
+        <p class="advice-text" id="adviceText"></p>
+        <div class="next-step-card">
+          <span id="nextStepLabel">まず今週やること</span>
+          <strong id="nextStepText"></strong>
+        </div>
+        <p class="advice-meta" id="adviceMeta">総合点、5領域の相対的な得点、各設問への回答をもとに、端末内のルールで自動作成しています。</p>
+      </section>
+
+      <details>
+        <summary id="reviewSummary">回答内容を確認する</summary>
+        <div class="answer-review" id="answerReview"></div>
+      </details>
+
+      <div class="result-actions">
+        <button type="button" class="secondary-button" id="copyButton">結果をコピー</button>
+        <button type="button" class="ghost-button" id="restartButton">最初からやり直す</button>
+      </div>
+      <p class="footer-note" id="resultNote">この結果は、公共善への貢献を考えるための自己評価の目安です。</p>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    "use strict";
+
+    const categories = {
+      dignity: { ja: "人間の尊厳", en: "Human Dignity", color: "#6c7f1e" },
+      solidarity: { ja: "連帯", en: "Solidarity", color: "#0797a1" },
+      ecology: { ja: "環境的持続可能性", en: "Ecological Sustainability", color: "#829321" },
+      justice: { ja: "社会正義", en: "Social Justice", color: "#0b8d95" },
+      democracy: { ja: "民主的参加", en: "Democratic Participation", color: "#758b1b" }
+    };
+
+    const questions = [
+      {
+        category: "dignity",
+        ja: "自分自身：私は自分をかけがえのない一人の人間として捉え、自分自身の価値を認め、大切にしてきた。",
+        en: "My own: I have perceived myself as a unique human being and shown appreciation.",
+        scores: [-1, 0, 2, 3, 5]
+      },
+      {
+        category: "dignity",
+        ja: "他者：私は他者を一人ひとり固有の存在として捉え、敬意を示してきた。",
+        en: "Others’: I have perceived other people in their uniqueness and shown appreciation.",
+        scores: [-2, 0, 1, 2, 4]
+      },
+      {
+        category: "dignity",
+        ja: "関係性：私は、自分自身との関係も含め、人との関係を意識的に築いてきた。",
+        en: "In relationships: I have shaped my relations consciously, including the relation to myself.",
+        scores: [-1, 0, 1, 3, 4]
+      },
+      {
+        category: "dignity",
+        ja: "コミュニケーション：日常生活で、家族・友人・同僚・店員など、他者と意識的にコミュニケーションを取ってきた。",
+        en: "In communication: I have consciously communicated with other people (family members, friends, colleagues, cashiers etc.) in my daily life.",
+        scores: [-1, 0, 1, 2, 3]
+      },
+      {
+        category: "dignity",
+        ja: "行動：社会・経済の仕組みにおいて、人間の尊厳が尊重されるよう働きかけてきた。",
+        en: "Taking action: I have advocated for the respect for human dignity in social and economic institutions.",
+        scores: [-1, 0, 1, 2, 3]
+      },
+      {
+        category: "solidarity",
+        ja: "見返りを求めない：具体的な見返りを期待せずに、寄付したり、与えたり、助けたり、分かち合ったりしてきた。",
+        en: "Zero expectations: I have donated / given / helped / shared without expecting concrete favours in return.",
+        scores: [-1, 0, 2, 3, 4]
+      },
+      {
+        category: "solidarity",
+        ja: "寛大さ：時間・知識・お金・物を提供するとき、相手が必要としていることを考えてきた。",
+        en: "Generosity: I have given time / knowledge / money / goods and thought about others’ needs in doing so.",
+        scores: [0, 1, 3, 4, 6]
+      },
+      {
+        category: "solidarity",
+        ja: "感謝：時間・知識・お金・物を贈られたとき、感謝して受け取ってきた。",
+        en: "Thankfulness: I have gratefully accepted time / knowledge / money / goods when given to me as a present.",
+        scores: [-1, 1, 2, 3, 4]
+      },
+      {
+        category: "solidarity",
+        ja: "勇気：道徳的な勇気を示し、自由に意見を表明することを恐れず行ってきた。",
+        en: "Courage: I have dared to demonstrate moral courage and freedom of expression.",
+        scores: [-1, 0, 1, 3, 4]
+      },
+      {
+        category: "solidarity",
+        ja: "効果：連帯のための行動全体を通じて、社会への影響や効果にも目を向けてきた。",
+        en: "Effectiveness: In my entire display of solidarity I have also observed effects on society.",
+        scores: [-1, 1, 2, 3, 4]
+      },
+      {
+        category: "ecology",
+        ja: "消費行動：持続可能な製品・サービスだけを、必要な分だけ消費・利用してきた。",
+        en: "Consumer behaviour: I have only consumed / used sustainable products and services – and only as much as I really needed.",
+        scores: [-2, -1, 1, 2, 4]
+      },
+      {
+        category: "ecology",
+        ja: "食：可能な範囲で、菜食、有機、地域産、旬、または自家栽培の食べ物を選んできた。",
+        en: "Food: As far as possible I have only consumed vegetarian, organic, regional and seasonal or home-grown food.",
+        scores: [-2, 0, 1, 2, 4]
+      },
+      {
+        category: "ecology",
+        ja: "エネルギー：電気や暖房には、再生可能エネルギーだけを利用してきた。",
+        en: "Energy: I have used energy for electricity and for heating only from renewable sources.",
+        scores: [-2, -1, 1, 2, 3]
+      },
+      {
+        category: "ecology",
+        ja: "移動：環境に配慮した交通手段だけを利用してきた。",
+        en: "Mobility: I have used only environmentally friendly means of transport.",
+        scores: [-2, -1, 1, 2, 3]
+      },
+      {
+        category: "ecology",
+        ja: "環境への働きかけ：他の人にも、環境的に持続可能な行動を促してきた。",
+        en: "Taking action for the environment: I have also inspired other people to behave ecologically sustainable.",
+        scores: [0, 0, 1, 2, 3]
+      },
+      {
+        category: "justice",
+        ja: "役割分担：社会および自分の生活圏における権利・義務の公正な分担について、率直かつ誠実に話し合い、それに沿って行動してきた。",
+        en: "Division of tasks: I have spoken openly and sincerely about just division of rights / obligations in society and within my sphere of life and acted accordingly.",
+        scores: [-1, 0, 1, 3, 4]
+      },
+      {
+        category: "justice",
+        ja: "交換と購買：他者との物々交換や購買の場面で、相手を尊重して関わってきた。",
+        en: "Bartering and buying: I have respectfully engaged in bartering and buying activities with others.",
+        scores: [-1, 0, 2, 3, 4]
+      },
+      {
+        category: "justice",
+        ja: "機会の平等：公正な社会の実現を公に支持し、働きかけてきた。",
+        en: "Equal opportunities: I have publicly advocated for a just society.",
+        scores: [-1, 0, 2, 3, 4]
+      },
+      {
+        category: "justice",
+        ja: "共有：自分の持ち物を他者と分かち合い、公共善に沿って活用してきた。",
+        en: "Sharing: I have shared my possessions with others and used them in line with the common good.",
+        scores: [-2, 0, 1, 2, 4]
+      },
+      {
+        category: "justice",
+        ja: "節度：強欲や利益への貪欲さにつながる行動（投機による利益、配当、高すぎる利息、家賃収入など）を意識的に控えてきた。",
+        en: "Modesty: I have consciously renounced behaviours of avarice and greed for profit (e.g. earnings from speculations, dividends, inflated interest rates, rental income).",
+        scores: [-1, 0, 1, 2, 3]
+      },
+      {
+        category: "democracy",
+        ja: "民主主義への自覚：市民としての主権者意識と、自分の人生および社会に対する責任を自覚してきた。",
+        en: "Democratic awareness: I have made myself aware of my sovereign as citizen as well as my responsibility for my life and society.",
+        scores: [0, 1, 2, 3, 5]
+      },
+      {
+        category: "democracy",
+        ja: "自分の意見：自分自身の意見を形成し、それに基づいて行動してきた。",
+        en: "Own opinion: I have formed my own opinion and have followed it.",
+        scores: [-1, 1, 2, 4, 5]
+      },
+      {
+        category: "democracy",
+        ja: "政治文化：非暴力コミュニケーションやシステミック・コンセンシングなど、現代的なコミュニケーションと意思決定の方法に取り組んできた。",
+        en: "Political culture: I have engaged in contemporary forms of communication and decision making (e.g. non-violent communication, systemic consensing).",
+        scores: [0, 1, 2, 3, 4]
+      },
+      {
+        category: "democracy",
+        ja: "民主主義教育：民主主義への理解を深めることに貢献してきた。",
+        en: "Democracy education: I have contributed to a better understanding of democracy.",
+        scores: [-1, 1, 2, 3, 4]
+      },
+      {
+        category: "democracy",
+        ja: "政治的行動：社会のための政治的な活動やイベント（交流グループ、イニシアチブなど。政党政治に限らない）に参加してきた。",
+        en: "Political action: I have taken part in political events (for society; e.g. in groups of regulars, in initiatives, not necessarily party political).",
+        scores: [0, 1, 2, 3, 5]
+      }
+    ];
+
+    const responseLabels = [
+      { ja: "いいえ", en: "No" },
+      { ja: "どちらかといえばいいえ", en: "Partly no" },
+      { ja: "どちらともいえない", en: "No and yes" },
+      { ja: "どちらかといえばはい", en: "Partly yes" },
+      { ja: "はい", en: "Yes" }
+    ];
+
+    const ui = {
+      ja: {
+        brand: "公共善セルフチェック",
+        startEyebrow: "Common Good Self-Check 3.1",
+        startTitle: "公共善への貢献を<br>振り返る25の問い",
+        startLead: "過去12か月の行動について、もっとも近い回答を選んでください。正解・不正解はありません。",
+        privacyTitle: "回答はこの端末内だけで処理されます",
+        privacyText: "この試作版は回答を外部に送信・保存しません。診断とアドバイスも端末内で自動作成されます。所要時間の目安は5〜8分です。",
+        start: "セルフチェックを始める",
+        back: "戻る",
+        next: "次へ",
+        finish: "結果を見る",
+        resultEyebrow: "Your result",
+        resultTitle: "セルフチェック結果",
+        scoreUnit: "点 / 100点",
+        categoryResultTitle: "5領域の結果",
+        adviceKicker: "Next step",
+        adviceTitle: "公共善的な日常生活へのアドバイス",
+        nextStepLabel: "まず今週やること",
+        adviceMeta: "総合点、5領域の相対的な得点、各設問への回答をもとに、端末内のルールで自動作成しています。個別の専門的助言ではなく、振り返りのための提案です。",
+        review: "回答内容を確認する",
+        copy: "結果をコピー",
+        restart: "最初からやり直す",
+        startCredit: "日本語は本アプリ用の仮訳です。公開利用の前に、原資料の利用・翻訳条件をご確認ください。",
+        resultNote: "この結果は、公共善への貢献を考えるための自己評価の目安です。",
+        copied: "結果をコピーしました",
+        copyFailed: "コピーできませんでした",
+        points: "点",
+        question: "問"
+      },
+      en: {
+        brand: "Common Good Self-Check",
+        startEyebrow: "Common Good Self-Check 3.1",
+        startTitle: "25 questions to reflect on<br>your contribution to the common good",
+        startLead: "Evaluate your behaviour over the last 12 months and choose the answer that applies most. There are no right or wrong answers.",
+        privacyTitle: "Your answers stay on this device",
+        privacyText: "This prototype does not send or store answers externally. Scoring and guidance are also generated on this device. Estimated time: 5–8 minutes.",
+        start: "Start the self-check",
+        back: "Back",
+        next: "Next",
+        finish: "See my result",
+        resultEyebrow: "Your result",
+        resultTitle: "Self-check result",
+        scoreUnit: "points / 100",
+        categoryResultTitle: "Results in five areas",
+        adviceKicker: "Next step",
+        adviceTitle: "Guidance for everyday common-good practice",
+        nextStepLabel: "One action for this week",
+        adviceMeta: "This guidance is created on your device from your total score, relative results in the five areas, and individual answers. It is a reflection prompt, not professional personal advice.",
+        review: "Review my answers",
+        copy: "Copy result",
+        restart: "Start again",
+        startCredit: "The Japanese text is a provisional translation for this prototype. Confirm usage and translation permissions before public deployment.",
+        resultNote: "This result is an orientation for reflecting on your contribution to the common good.",
+        copied: "Result copied",
+        copyFailed: "Could not copy the result",
+        points: "points",
+        question: "Q"
+      }
+    };
+
+    const resultBands = [
+      {
+        min: 67,
+        jaTitle: "67〜100点",
+        enTitle: "67 to 100 points",
+        ja: "おめでとうございます。よい人生は、連帯するコミュニティの中で互いに関わり合うことによってこそ可能だと認識しています。さらに行動できる機会を探してみましょう。",
+        en: "Congratulations! You have recognized that a good life is only possible through interaction within a community of solidarity. Maybe you find some more opportunities to take further action."
+      },
+      {
+        min: 33,
+        jaTitle: "33〜66点",
+        enTitle: "33 to 66 points",
+        ja: "他者と環境のウェルビーイングを大切にしていることが表れています。この方向で、さらに成長を続けていきましょう。",
+        en: "The result shows that the well-being of others and your environment are important to you. You can continue your development in this direction!"
+      },
+      {
+        min: 0,
+        jaTitle: "0〜32点",
+        enTitle: "0 to 32 points",
+        ja: "ときどき他者を思いやっていますが、コミュニティのためにさらに多くのことができます。回答を振り返り、改善したい領域を決めてみましょう。",
+        en: "Sometimes you have been thinking of others and you could do a lot more for the community. Review the test and decide in which areas you would like to improve."
+      },
+      {
+        min: -Infinity,
+        jaTitle: "0点未満",
+        enTitle: "Below 0 points",
+        ja: "全項目に回答したか確認してください。回答済みなら、自分自身の利益に意識が集中していた可能性があります。5つの領域から来年改善したいものを1つ選び、具体的な目標を設定しましょう。",
+        en: "Have you checked all boxes? If yes, you have been concentrating mostly on your own good. Choose one of the five areas you would like to improve during the next year and set concrete goals."
+      }
+    ];
+
+    const stageAdvice = [
+      {
+        min: 67,
+        ja: "総合得点からは、公共善を意識した選択がすでに日常に根づいていることがうかがえます。次は、個人の実践を周囲へ無理なく広げる段階です。",
+        en: "Your total suggests that common-good choices are already part of your daily life. The next step is to sustain them and share what works, without imposing it on others."
+      },
+      {
+        min: 33,
+        ja: "総合得点からは、他者や環境への配慮がすでにあり、行動を少し習慣化することで公共善への貢献をさらに高められる段階です。",
+        en: "Your total shows an existing concern for other people and the environment. Turning one or two intentions into repeatable habits can deepen your contribution."
+      },
+      {
+        min: 0,
+        ja: "総合得点からは、公共善を意識する余地がまだ多くあります。ただし、大きな決意より、毎日の小さな選択を一つ変えることから始める方が続きます。",
+        en: "Your total leaves considerable room to make the common good more visible in daily choices. Start with one small, repeatable change rather than a large promise."
+      },
+      {
+        min: -Infinity,
+        ja: "今回の結果は、まず自分の生活を守ることが中心になっていた可能性を示します。責める材料ではなく、今後一年で変えたい領域を見つける出発点として扱いましょう。",
+        en: "This result may mean that protecting your own immediate needs has taken priority. Treat it as a starting point, not a judgement, and choose one area to develop over the coming year."
+      }
+    ];
+
+    const adviceLibrary = {
+      dignity: {
+        strength: {
+          ja: "自分と他者を、成果や役割だけでなく固有の存在として尊重する姿勢",
+          en: "respecting yourself and others as unique people rather than only by role or performance"
+        },
+        practice: {
+          ja: "人間の尊厳は、特別な活動より日常の接し方に表れます。自分にも他者にも、効率や成果だけで価値を測らない時間をつくりましょう。",
+          en: "Human dignity is expressed in ordinary interactions. Make room to value yourself and others beyond efficiency, status, or performance."
+        }
+      },
+      solidarity: {
+        strength: {
+          ja: "見返りを超えて支え合い、与えることと受け取ることを循環させる姿勢",
+          en: "supporting others beyond immediate return and allowing giving and receiving to circulate"
+        },
+        practice: {
+          ja: "連帯は、助ける側になることだけでなく、必要なときに助けを受け取ることでも育ちます。小さな贈与と感謝を循環させ、行動の効果まで確かめましょう。",
+          en: "Solidarity grows both by helping and by receiving help when needed. Let small acts of giving and gratitude circulate, and notice their effects."
+        }
+      },
+      ecology: {
+        strength: {
+          ja: "消費・食・エネルギー・移動が環境に与える影響へ目を向ける姿勢",
+          en: "noticing how consumption, food, energy, and mobility affect the environment"
+        },
+        practice: {
+          ja: "環境配慮は完璧さを競うものではありません。消費・食・エネルギー・移動のうち一つを選び、回数を決めて続けると習慣になります。",
+          en: "Ecological practice is not a contest in perfection. Choose one area—consumption, food, energy, or mobility—and repeat a specific action."
+        }
+      },
+      justice: {
+        strength: {
+          ja: "負担と利益の偏りに気づき、公正さ・共有・節度を選ぼうとする姿勢",
+          en: "noticing unequal burdens and benefits and choosing fairness, sharing, and moderation"
+        },
+        practice: {
+          ja: "社会正義は、身近な役割分担や取引の公正さから始まります。誰が利益を得て、誰に負担が偏るかを考え、共有と節度を選びましょう。",
+          en: "Social justice begins with fair roles and exchanges close to home. Ask who benefits, who carries the burden, and where sharing or moderation is possible."
+        }
+      },
+      democracy: {
+        strength: {
+          ja: "自分の意見を持ち、異なる意見を聴き、社会の意思決定に関わろうとする姿勢",
+          en: "forming your own view, listening across differences, and taking part in shared decisions"
+        },
+        practice: {
+          ja: "民主的参加は投票だけではありません。自分の意見を持ち、異なる意見を聴き、地域や職場の意思決定に小さく関わることも実践です。",
+          en: "Democratic participation is more than voting. Form a view, listen to different perspectives, and take a small role in decisions at work or in your community."
+        }
+      }
+    };
+
+    const itemActionTips = [
+      { ja: "一日の終わりに、自分が大切にした価値や、できたことを一つ書く", en: "At the end of the day, write down one value you upheld or one thing you did well." },
+      { ja: "身近な人を役割で決めつけず、その人の考えを一つ尋ねて最後まで聴く", en: "Ask someone close to you what they think, and listen without reducing them to their role." },
+      { ja: "大切な関係で、感謝・期待・境界線のいずれかを言葉にして伝える", en: "In an important relationship, put one appreciation, expectation, or boundary into words." },
+      { ja: "家族や同僚、店員との会話で、相手の話を遮らず一呼吸おいて応答する", en: "In one everyday conversation, pause and respond only after the other person has finished." },
+      { ja: "尊厳が損なわれている場面に気づいたら、事実を確かめて穏やかに声を上げる", en: "When you notice someone's dignity being undermined, check the facts and speak up calmly." },
+      { ja: "週に一度、見返りを求めず時間・知識・物のどれかを差し出す", en: "Once this week, offer time, knowledge, or an item without expecting a direct return." },
+      { ja: "助ける前に『何が必要ですか』と尋ね、相手の必要に合わせて支援する", en: "Before helping, ask what is needed and adapt your support to the person's answer." },
+      { ja: "誰かの厚意を遠慮だけで断らず、感謝を言葉にして受け取る", en: "Accept one kind offer instead of declining automatically, and express your thanks." },
+      { ja: "不公正だと感じた場面で、相手を攻撃せず自分の意見を一度表明する", en: "In one unfair situation, state your view without attacking the other person." },
+      { ja: "支援した後に、相手や周囲にどんな変化があったかを振り返る", en: "After helping, reflect on what actually changed for the person or the wider situation." },
+      { ja: "買う前に10秒立ち止まり、『本当に必要か・長く使えるか』を確認する", en: "Before one purchase, pause for ten seconds and ask whether it is needed and durable." },
+      { ja: "週に一食、旬・地域産・有機・植物性の食材を選ぶ", en: "Choose one meal this week using seasonal, local, organic, or plant-based ingredients." },
+      { ja: "電力契約や暖房設定を見直し、再生可能エネルギーを選べるか確認する", en: "Review your energy plan or heating settings and check whether renewable energy is available." },
+      { ja: "近距離の移動を一回だけ、徒歩・自転車・公共交通に置き換える", en: "Replace one short trip with walking, cycling, or public transport." },
+      { ja: "環境に配慮した工夫を一つ実践し、身近な人に経験として共有する", en: "Try one ecological practice and share your experience, rather than a lecture, with someone close." },
+      { ja: "家事や仕事の役割を一覧にし、負担の偏りを当事者同士で話し合う", en: "List household or work tasks and discuss any unequal burden with the people involved." },
+      { ja: "価格だけでなく、作り手・労働条件・地域への影響も見て商品を一つ選ぶ", en: "Choose one product by considering its makers, labour conditions, and local impact as well as price." },
+      { ja: "機会の不平等に気づいたら、賛同や情報共有など小さな支持を示す", en: "When you notice unequal opportunity, show a small form of support such as endorsement or sharing information." },
+      { ja: "月に一度、使っていない物を貸す・譲る・共同利用する", en: "Once this month, lend, give away, or share something you are not using." },
+      { ja: "利益や便利さを優先しすぎていないか、支出や資産の選び方を一つ見直す", en: "Review one spending or asset choice and ask whether profit or convenience is taking too much priority." },
+      { ja: "関心のある社会課題を一つ選び、自分にできる責任ある行動を書き出す", en: "Choose one public issue and write down one responsible action you can take." },
+      { ja: "一つのテーマについて自分の意見と、その根拠を三行でまとめる", en: "Summarize your view on one issue and the reasons for it in three lines." },
+      { ja: "意見の違う人との対話で、反論の前に相手の主張を要約して確認する", en: "Before disagreeing, summarize the other person's position and ask whether you understood it." },
+      { ja: "民主主義や対話について学んだことを一つ、身近な人に共有する", en: "Share one thing you learned about democracy or dialogue with someone close to you." },
+      { ja: "地域活動、署名、対話会など、政党政治に限らない市民活動を一つ調べる", en: "Look up one civic activity such as a local initiative, petition, or dialogue event." }
+    ];
+
+    const categoryRanges = Object.keys(categories).reduce((acc, key) => {
+      const qs = questions.filter(q => q.category === key);
+      acc[key] = {
+        min: qs.reduce((sum, q) => sum + Math.min(...q.scores), 0),
+        max: qs.reduce((sum, q) => sum + Math.max(...q.scores), 0)
+      };
+      return acc;
+    }, {});
+
+    let language = "ja";
+    let currentIndex = 0;
+    let answers = Array(questions.length).fill(null);
+
+    const $ = id => document.getElementById(id);
+    const startScreen = $("startScreen");
+    const questionScreen = $("questionScreen");
+    const resultScreen = $("resultScreen");
+    const answerForm = $("answerForm");
+    const optionsEl = $("options");
+    const nextButton = $("nextButton");
+    const backButton = $("backButton");
+
+    function showScreen(screen) {
+      [startScreen, questionScreen, resultScreen].forEach(el => el.classList.add("hidden"));
+      screen.classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function updateStaticUI() {
+      const t = ui[language];
+      document.documentElement.lang = language;
+      $("brandText").textContent = t.brand;
+      $("langToggle").textContent = language === "ja" ? "EN" : "日本語";
+      $("startEyebrow").textContent = t.startEyebrow;
+      $("startTitle").innerHTML = t.startTitle;
+      $("startLead").textContent = t.startLead;
+      $("privacyTitle").textContent = t.privacyTitle;
+      $("privacyText").textContent = t.privacyText;
+      $("startButton").textContent = t.start;
+      $("backButton").textContent = t.back;
+      $("resultEyebrow").textContent = t.resultEyebrow;
+      $("resultTitle").textContent = t.resultTitle;
+      $("scoreUnit").textContent = t.scoreUnit;
+      $("categoryResultTitle").textContent = t.categoryResultTitle;
+      $("adviceKicker").textContent = t.adviceKicker;
+      $("adviceTitle").textContent = t.adviceTitle;
+      $("nextStepLabel").textContent = t.nextStepLabel;
+      $("adviceMeta").textContent = t.adviceMeta;
+      $("reviewSummary").textContent = t.review;
+      $("copyButton").textContent = t.copy;
+      $("restartButton").textContent = t.restart;
+      $("startCredit").textContent = t.startCredit;
+      $("resultNote").textContent = t.resultNote;
+
+      if (!questionScreen.classList.contains("hidden")) renderQuestion();
+      if (!resultScreen.classList.contains("hidden")) renderResults();
+    }
+
+    function renderQuestion() {
+      const q = questions[currentIndex];
+      const category = categories[q.category];
+      const t = ui[language];
+      const progress = ((currentIndex + 1) / questions.length) * 100;
+
+      $("progressLabel").textContent = `${currentIndex + 1} / ${questions.length}`;
+      $("progressPercent").textContent = `${Math.round(progress)}%`;
+      $("progressBar").style.width = `${progress}%`;
+      $("categoryPill").textContent = category[language];
+      $("categoryPill").style.setProperty("--category-color", category.color);
+      $("questionTitle").textContent = q[language];
+      $("questionEnglish").textContent = language === "ja" ? q.en : "";
+      $("questionEnglish").classList.toggle("hidden", language !== "ja");
+
+      optionsEl.innerHTML = responseLabels.map((label, index) => {
+        const checked = answers[currentIndex] === index ? "checked" : "";
+        const secondary = language === "ja" ? `<span class="option-en">${label.en}</span>` : "";
+        return `
+          <label class="option">
+            <input type="radio" name="answer" value="${index}" ${checked} />
+            <span class="radio-dot" aria-hidden="true"></span>
+            <span class="option-label">${label[language]}${secondary}</span>
+          </label>`;
+      }).join("");
+
+      nextButton.textContent = currentIndex === questions.length - 1 ? t.finish : t.next;
+      nextButton.disabled = answers[currentIndex] === null;
+      backButton.disabled = currentIndex === 0;
+    }
+
+    function calculateResults() {
+      const categoryScores = Object.keys(categories).reduce((acc, key) => ({ ...acc, [key]: 0 }), {});
+      let total = 0;
+
+      questions.forEach((q, index) => {
+        const answerIndex = answers[index];
+        const score = q.scores[answerIndex];
+        categoryScores[q.category] += score;
+        total += score;
+      });
+
+      return { total, categoryScores };
+    }
+
+    function getCategoryMetrics(categoryScores) {
+      return Object.keys(categories).map(key => {
+        const range = categoryRanges[key];
+        const score = categoryScores[key];
+        const percent = (score - range.min) / (range.max - range.min);
+        return { key, score, percent: Math.max(0, Math.min(1, percent)) };
+      });
+    }
+
+    function getLowestQuestionIndex(categoryKey) {
+      const candidates = questions
+        .map((question, index) => ({ question, index }))
+        .filter(item => item.question.category === categoryKey);
+
+      candidates.sort((a, b) => {
+        const answerDifference = answers[a.index] - answers[b.index];
+        if (answerDifference !== 0) return answerDifference;
+
+        const scoreA = a.question.scores[answers[a.index]];
+        const scoreB = b.question.scores[answers[b.index]];
+        const rangeA = Math.max(...a.question.scores) - Math.min(...a.question.scores);
+        const rangeB = Math.max(...b.question.scores) - Math.min(...b.question.scores);
+        const normalizedA = rangeA === 0 ? 0 : (scoreA - Math.min(...a.question.scores)) / rangeA;
+        const normalizedB = rangeB === 0 ? 0 : (scoreB - Math.min(...b.question.scores)) / rangeB;
+        return normalizedA - normalizedB;
+      });
+
+      return candidates[0].index;
+    }
+
+    function buildAdvice() {
+      const { total, categoryScores } = calculateResults();
+      const stage = stageAdvice.find(item => total >= item.min);
+      const metrics = getCategoryMetrics(categoryScores).sort((a, b) => a.percent - b.percent);
+      const weakest = metrics[0];
+      const secondWeakest = metrics[1];
+      const strongest = metrics[metrics.length - 1];
+      const weakestQuestionIndex = getLowestQuestionIndex(weakest.key);
+      const secondQuestionIndex = getLowestQuestionIndex(secondWeakest.key);
+      const spread = strongest.percent - weakest.percent;
+      const allStrong = weakest.percent >= 0.82;
+      const balanced = spread < 0.07;
+      const firstTip = itemActionTips[weakestQuestionIndex][language];
+      const secondTip = itemActionTips[secondQuestionIndex][language];
+
+      if (language === "ja") {
+        let profileText;
+        if (allStrong) {
+          profileText = "5領域はいずれも高い水準です。改善点を探すというより、できている実践を無理なく続け、経験を身近な人と分かち合うことが次の貢献になります。";
+        } else if (balanced) {
+          profileText = "5領域の得点は比較的近く、特定の一領域だけが突出しているというより、暮らし全体を少しずつ整えていくタイプの結果です。";
+        } else {
+          profileText = `相対的な強みは「${categories[strongest.key].ja}」です。${adviceLibrary[strongest.key].strength.ja}が表れています。この強みを家族・職場・地域で一つ共有すると、個人の実践が周囲の変化にもつながります。`;
+        }
+
+        const focusLabel = weakest.percent >= 0.72 ? "さらに深めたい領域" : "最優先で伸ばしたい領域";
+        const focusOne = `${focusLabel}は「${categories[weakest.key].ja}」です。回答内容から、今週は「${firstTip}」を試してください。${adviceLibrary[weakest.key].practice.ja}`;
+        const focusTwo = `次に「${categories[secondWeakest.key].ja}」では、「${secondTip}」を一度実行してみましょう。できたかどうかを週末に短く振り返るだけで十分です。`;
+        const closing = "すべてを一度に変える必要はありません。最初の行動を「いつ・どこで・誰と行うか」まで決め、二週間続けた後に設問を見直してください。できた日には、自分や周囲の気持ちの変化も一言メモすると、次の工夫が見つかります。点数を上げることより、選択の理由を自覚し、無理なく続けることが大切です。";
+
+        return {
+          text: [stage.ja, profileText, focusOne, focusTwo, closing].join("\n\n"),
+          nextStep: allStrong
+            ? "自分が続けている公共善的な工夫を一つ身近な人に共有し、その人の工夫も尋ねる"
+            : firstTip
+        };
+      }
+
+      let profileText;
+      if (allStrong) {
+        profileText = "All five areas are at a high level. Rather than searching for a deficiency, focus on sustaining your practices and sharing useful experience with people around you.";
+      } else if (balanced) {
+        profileText = "Your five area scores are relatively balanced. This suggests that gradual improvements across everyday life may suit you better than concentrating everything on one area.";
+      } else {
+        profileText = `Your relative strength is ${categories[strongest.key].en}: ${adviceLibrary[strongest.key].strength.en}. Sharing one practice at home, at work, or in your community can help turn an individual strength into wider change.`;
+      }
+
+      const focusLabel = weakest.percent >= 0.72 ? "An area to deepen further" : "The first area to develop";
+      const focusOne = `${focusLabel} is ${categories[weakest.key].en}. Based on your answers, try this action this week: “${firstTip}” ${adviceLibrary[weakest.key].practice.en}`;
+      const focusTwo = `A second opportunity is ${categories[secondWeakest.key].en}. Try this once: “${secondTip}” A brief review at the end of the week is enough.`;
+      const closing = "You do not need to change everything at once. Decide when, where, and with whom you will take the first action, repeat it for two weeks, and then revisit the questions. The aim is not merely a higher score, but more conscious and sustainable choices.";
+
+      return {
+        text: [stage.en, profileText, focusOne, focusTwo, closing].join("\n\n"),
+        nextStep: allStrong
+          ? "Share one common-good practice you already sustain and ask the other person about their own practice."
+          : firstTip
+      };
+    }
+
+    function renderResults() {
+      const { total, categoryScores } = calculateResults();
+      const band = resultBands.find(item => total >= item.min);
+      const t = ui[language];
+      const normalizedTotal = Math.max(0, Math.min(100, total));
+
+      $("totalScore").textContent = total;
+      $("scoreUnit").textContent = t.scoreUnit;
+      $("resultScoreRing").style.setProperty("--score-angle", `${normalizedTotal * 3.6}deg`);
+      $("bandTitle").textContent = language === "ja" ? band.jaTitle : band.enTitle;
+      $("bandText").textContent = band[language];
+
+      $("categoryResults").innerHTML = Object.entries(categories).map(([key, category]) => {
+        const score = categoryScores[key];
+        const range = categoryRanges[key];
+        const percent = ((score - range.min) / (range.max - range.min)) * 100;
+        return `
+          <div class="category-result" style="--category-color:${category.color}">
+            <div class="category-result-head">
+              <span>${category[language]}</span>
+              <span>${score} ${t.points}</span>
+            </div>
+            <div class="mini-track" aria-hidden="true"><div class="mini-bar" style="width:${Math.max(0, Math.min(100, percent))}%"></div></div>
+            <div class="score-range">${range.min}–${range.max} ${t.points}</div>
+          </div>`;
+      }).join("");
+
+      const advice = buildAdvice();
+      $("adviceText").textContent = advice.text;
+      $("nextStepText").textContent = advice.nextStep;
+
+      $("answerReview").innerHTML = questions.map((q, index) => {
+        const answerIndex = answers[index];
+        const score = q.scores[answerIndex];
+        return `
+          <div class="answer-row">
+            <strong>${t.question}${index + 1}. ${q[language]}</strong><br>
+            <small>${responseLabels[answerIndex][language]} / ${score} ${t.points}</small>
+          </div>`;
+      }).join("");
+    }
+
+    function getCopyText() {
+      const { total, categoryScores } = calculateResults();
+      const band = resultBands.find(item => total >= item.min);
+      const t = ui[language];
+      const lines = [
+        language === "ja" ? "公共善セルフチェック 3.1" : "Common Good Self-Check 3.1",
+        `${language === "ja" ? "総合得点" : "Total"}: ${total} / 100`,
+        language === "ja" ? band.jaTitle : band.enTitle,
+        ""
+      ];
+
+      Object.entries(categories).forEach(([key, category]) => {
+        lines.push(`${category[language]}: ${categoryScores[key]} ${t.points}`);
+      });
+      const advice = buildAdvice();
+      lines.push("", band[language], "", t.adviceTitle, advice.text, "", `${t.nextStepLabel}: ${advice.nextStep}`);
+      return lines.join("\n");
+    }
+
+    function showToast(message) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+
+    $("langToggle").addEventListener("click", () => {
+      language = language === "ja" ? "en" : "ja";
+      updateStaticUI();
+    });
+
+    $("startButton").addEventListener("click", () => {
+      currentIndex = 0;
+      renderQuestion();
+      showScreen(questionScreen);
+    });
+
+    optionsEl.addEventListener("change", event => {
+      if (event.target.name !== "answer") return;
+      answers[currentIndex] = Number(event.target.value);
+      nextButton.disabled = false;
+    });
+
+    answerForm.addEventListener("submit", event => {
+      event.preventDefault();
+      if (answers[currentIndex] === null) return;
+
+      if (currentIndex < questions.length - 1) {
+        currentIndex += 1;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        renderResults();
+        showScreen(resultScreen);
+      }
+    });
+
+    backButton.addEventListener("click", () => {
+      if (currentIndex === 0) return;
+      currentIndex -= 1;
+      renderQuestion();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    $("restartButton").addEventListener("click", () => {
+      const confirmText = language === "ja"
+        ? "回答をすべて消して最初からやり直しますか？"
+        : "Clear all answers and start again?";
+      if (!window.confirm(confirmText)) return;
+      answers = Array(questions.length).fill(null);
+      currentIndex = 0;
+      showScreen(startScreen);
+    });
+
+    $("copyButton").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(getCopyText());
+        showToast(ui[language].copied);
+      } catch (error) {
+        const textArea = document.createElement("textarea");
+        textArea.value = getCopyText();
+        document.body.appendChild(textArea);
+        textArea.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(textArea);
+        showToast(ok ? ui[language].copied : ui[language].copyFailed);
+      }
+    });
+
+    updateStaticUI();
+  </script>
+</body>
+</html>
