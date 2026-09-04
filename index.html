@@ -347,6 +347,85 @@
       line-height: 1.6;
     }
 
+    .recommendation-panel {
+      margin: 28px 0 24px;
+      padding: clamp(20px, 4vw, 28px);
+      border: 1px solid #d8ddd4;
+      border-radius: 18px;
+      background: rgba(255,255,255,.94);
+    }
+    .recommendation-kicker {
+      margin-bottom: 5px;
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .recommendation-panel > h2 { margin-bottom: 8px; font-size: clamp(23px, 5vw, 30px); }
+    .recommendation-intro { margin-bottom: 20px; color: var(--muted); }
+    .recommendation-groups {
+      display: grid;
+      gap: 22px;
+    }
+    .recommendation-group h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 20px;
+    }
+    .recommendation-list {
+      display: grid;
+      gap: 12px;
+    }
+    .recommendation-card {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfcfa;
+    }
+    .recommendation-badge {
+      display: inline-block;
+      margin-bottom: 8px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      color: var(--primary-dark);
+      background: #eef3e7;
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .recommendation-title {
+      margin-bottom: 2px;
+      font-size: 18px;
+      font-weight: 850;
+      line-height: 1.45;
+    }
+    .recommendation-original {
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .recommendation-credit {
+      margin-bottom: 8px;
+      color: #47534c;
+      font-size: 13px;
+      font-weight: 750;
+    }
+    .recommendation-reason {
+      margin: 0;
+      color: #344039;
+      font-size: 14px;
+      line-height: 1.75;
+    }
+    .recommendation-note {
+      margin: 18px 2px 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
     .category-results {
       display: grid;
       gap: 14px;
@@ -502,6 +581,23 @@
           <strong id="nextStepText"></strong>
         </div>
         <p class="advice-meta" id="adviceMeta">総合点、5領域の相対的な得点、各設問への回答をもとに、端末内のルールで自動作成しています。</p>
+      </section>
+
+      <section class="recommendation-panel" aria-labelledby="recommendationTitle">
+        <div class="recommendation-kicker" id="recommendationKicker">Explore further</div>
+        <h2 id="recommendationTitle">理解を深める本と映画</h2>
+        <p class="recommendation-intro" id="recommendationIntro"></p>
+        <div class="recommendation-groups">
+          <section class="recommendation-group" aria-labelledby="bookRecommendationsTitle">
+            <h3><span aria-hidden="true">📚</span><span id="bookRecommendationsTitle">おすすめの本 3冊</span></h3>
+            <div class="recommendation-list" id="bookRecommendations"></div>
+          </section>
+          <section class="recommendation-group" aria-labelledby="filmRecommendationsTitle">
+            <h3><span aria-hidden="true">🎬</span><span id="filmRecommendationsTitle">おすすめの映画 3本</span></h3>
+            <div class="recommendation-list" id="filmRecommendations"></div>
+          </section>
+        </div>
+        <p class="recommendation-note" id="recommendationNote"></p>
       </section>
 
       <details>
@@ -711,6 +807,17 @@
         adviceTitle: "公共善的な日常生活へのアドバイス",
         nextStepLabel: "まず今週やること",
         adviceMeta: "総合点、5領域の相対的な得点、各設問への回答をもとに、端末内のルールで自動作成しています。個別の専門的助言ではなく、振り返りのための提案です。",
+        recommendationKicker: "Explore further",
+        recommendationTitle: "理解を深める本と映画",
+        recommendationIntro: "相対的に改善余地が大きかった2領域と、公共善を統合的に考えるための作品から選んでいます。",
+        bookRecommendationsTitle: "おすすめの本 3冊",
+        filmRecommendationsTitle: "おすすめの映画 3本",
+        recommendationNote: "作品の選定は原資料に含まれるものではなく、本アプリ独自の参考提案です。入手・配信状況は地域や時期により異なります。",
+        recommendationPrimary: "最優先で深める領域",
+        recommendationSecondary: "次に深める領域",
+        recommendationIntegrative: "5領域をつなぐ一冊・一本",
+        authorLabel: "著者",
+        directorLabel: "監督",
         review: "回答内容を確認する",
         copy: "結果をコピー",
         restart: "最初からやり直す",
@@ -740,6 +847,17 @@
         adviceTitle: "Guidance for everyday common-good practice",
         nextStepLabel: "One action for this week",
         adviceMeta: "This guidance is created on your device from your total score, relative results in the five areas, and individual answers. It is a reflection prompt, not professional personal advice.",
+        recommendationKicker: "Explore further",
+        recommendationTitle: "Books and films to deepen your reflection",
+        recommendationIntro: "These selections reflect the two areas with the most room for growth, plus one work that connects all five common-good areas.",
+        bookRecommendationsTitle: "3 recommended books",
+        filmRecommendationsTitle: "3 recommended films",
+        recommendationNote: "These recommendations are an editorial feature of this app and are not part of the original self-check. Availability varies by region and time.",
+        recommendationPrimary: "First area to deepen",
+        recommendationSecondary: "Second area to deepen",
+        recommendationIntegrative: "Connecting all five areas",
+        authorLabel: "Author",
+        directorLabel: "Director",
         review: "Review my answers",
         copy: "Copy result",
         restart: "Start again",
@@ -859,6 +977,109 @@
       }
     };
 
+    const recommendationLibrary = {
+      books: {
+        dignity: {
+          title: { ja: "愛するということ", en: "The Art of Loving" },
+          creator: { ja: "エーリッヒ・フロム", en: "Erich Fromm" },
+          reason: {
+            ja: "自分と他者を、成果や役割ではなく、能動的に関わり尊重する存在として捉え直す視点を深めます。",
+            en: "Deepens the view that dignity grows through active care and respect, rather than judging people only by role or achievement."
+          }
+        },
+        solidarity: {
+          title: { ja: "Humankind 希望の歴史", en: "Humankind: A Hopeful History" },
+          creator: { ja: "ルトガー・ブレグマン", en: "Rutger Bregman" },
+          reason: {
+            ja: "人間は協力できるという前提から、信頼と支え合いを日常や社会の仕組みにどう生かすかを考えられます。",
+            en: "Invites reflection on how trust, cooperation, and mutual support can shape everyday behaviour and social institutions."
+          }
+        },
+        ecology: {
+          title: { ja: "沈黙の春", en: "Silent Spring" },
+          creator: { ja: "レイチェル・カーソン", en: "Rachel Carson" },
+          reason: {
+            ja: "日常の便利さと、自然や健康に及ぶ見えにくい影響のつながりを捉え、選択の責任を考える入口になります。",
+            en: "Connects everyday convenience with less visible effects on nature and health, opening a path to more responsible choices."
+          }
+        },
+        justice: {
+          title: { ja: "これからの「正義」の話をしよう", en: "Justice: What's the Right Thing to Do?" },
+          creator: { ja: "マイケル・サンデル", en: "Michael J. Sandel" },
+          reason: {
+            ja: "負担、利益、自由、公正をめぐる正解のない問いを、具体的な事例から対話的に考えられます。",
+            en: "Uses concrete dilemmas to explore difficult questions about fairness, freedom, benefits, and burdens through dialogue."
+          }
+        },
+        democracy: {
+          title: { ja: "民主主義の死に方", en: "How Democracies Die" },
+          creator: { ja: "スティーブン・レビツキー／ダニエル・ジブラット", en: "Steven Levitsky and Daniel Ziblatt" },
+          reason: {
+            ja: "制度だけでなく、相互的寛容や自制といった、民主主義を日常的に支える態度と規範を考えられます。",
+            en: "Shows how democratic life depends not only on institutions but also on habits such as mutual toleration and restraint."
+          }
+        },
+        integrative: {
+          title: { ja: "ドーナツ経済学が世界を救う", en: "Doughnut Economics" },
+          creator: { ja: "ケイト・ラワース", en: "Kate Raworth" },
+          reason: {
+            ja: "人の尊厳を支える社会的な土台と、地球環境の限界を同時に捉え、5領域を一つの全体として考える枠組みです。",
+            en: "Connects the social foundations of human dignity with ecological limits, offering a framework that brings all five areas together."
+          }
+        }
+      },
+      films: {
+        dignity: {
+          title: { ja: "PERFECT DAYS", en: "Perfect Days" },
+          creator: { ja: "ヴィム・ヴェンダース", en: "Wim Wenders" },
+          reason: {
+            ja: "仕事や暮らしの反復の中にある尊厳、注意深さ、他者との静かな関係を見つめ直せます。",
+            en: "Reflects on dignity, attentiveness, and quiet relationships within the repeated rhythms of work and everyday life."
+          }
+        },
+        solidarity: {
+          title: { ja: "パレードへようこそ", en: "Pride" },
+          creator: { ja: "マシュー・ウォーチャス", en: "Matthew Warchus" },
+          reason: {
+            ja: "異なる背景を持つ人々が、偏見を越えて支え合い、共通の課題に向き合うことで生まれる連帯を描きます。",
+            en: "Shows solidarity emerging when people from different backgrounds cross prejudice and support one another around a shared struggle."
+          }
+        },
+        ecology: {
+          title: { ja: "ビッグ・リトル・ファーム 理想の暮らしのつくり方", en: "The Biggest Little Farm" },
+          creator: { ja: "ジョン・チェスター", en: "John Chester" },
+          reason: {
+            ja: "自然を一方的に制御するのではなく、観察し、関係を整えながら共生する実践を具体的に考えられます。",
+            en: "Offers a concrete view of working with nature through observation, relationships, and coexistence rather than simple control."
+          }
+        },
+        justice: {
+          title: { ja: "わたしは、ダニエル・ブレイク", en: "I, Daniel Blake" },
+          creator: { ja: "ケン・ローチ", en: "Ken Loach" },
+          reason: {
+            ja: "制度の狭間で傷つく人の尊厳と、貧困や格差の中で交わされる身近な助け合いの意味を問いかけます。",
+            en: "Questions what dignity and mutual aid mean for people harmed by poverty, inequality, and impersonal systems."
+          }
+        },
+        democracy: {
+          title: { ja: "十二人の怒れる男", en: "12 Angry Men" },
+          creator: { ja: "シドニー・ルメット", en: "Sidney Lumet" },
+          reason: {
+            ja: "多数派に流されず、思い込みを点検し、根拠を確かめながら異なる意見と対話する民主的態度を体験できます。",
+            en: "Dramatizes democratic habits: resisting group pressure, checking assumptions, testing evidence, and engaging opposing views."
+          }
+        },
+        integrative: {
+          title: { ja: "TOMORROW パーマネントライフを探して", en: "Tomorrow (Demain)" },
+          creator: { ja: "シリル・ディオン／メラニー・ロラン", en: "Cyril Dion and Mélanie Laurent" },
+          reason: {
+            ja: "食、エネルギー、経済、教育、民主主義を横断し、公共善につながる実行可能な変化の事例に出会えます。",
+            en: "Connects food, energy, economics, education, and democracy through practical examples of common-good change."
+          }
+        }
+      }
+    };
+
     const itemActionTips = [
       { ja: "一日の終わりに、自分が大切にした価値や、できたことを一つ書く", en: "At the end of the day, write down one value you upheld or one thing you did well." },
       { ja: "身近な人を役割で決めつけず、その人の考えを一つ尋ねて最後まで聴く", en: "Ask someone close to you what they think, and listen without reducing them to their role." },
@@ -935,6 +1156,12 @@
       $("adviceTitle").textContent = t.adviceTitle;
       $("nextStepLabel").textContent = t.nextStepLabel;
       $("adviceMeta").textContent = t.adviceMeta;
+      $("recommendationKicker").textContent = t.recommendationKicker;
+      $("recommendationTitle").textContent = t.recommendationTitle;
+      $("recommendationIntro").textContent = t.recommendationIntro;
+      $("bookRecommendationsTitle").textContent = t.bookRecommendationsTitle;
+      $("filmRecommendationsTitle").textContent = t.filmRecommendationsTitle;
+      $("recommendationNote").textContent = t.recommendationNote;
       $("reviewSummary").textContent = t.review;
       $("copyButton").textContent = t.copy;
       $("restartButton").textContent = t.restart;
@@ -1080,6 +1307,54 @@
       };
     }
 
+    function buildRecommendations() {
+      const { categoryScores } = calculateResults();
+      const metrics = getCategoryMetrics(categoryScores).sort((a, b) => a.percent - b.percent);
+      const primaryKey = metrics[0].key;
+      const secondaryKey = metrics[1].key;
+      const t = ui[language];
+
+      const makeItem = (type, key, badge) => ({
+        ...recommendationLibrary[type][key],
+        key,
+        badge
+      });
+
+      return {
+        books: [
+          makeItem("books", primaryKey, t.recommendationPrimary),
+          makeItem("books", secondaryKey, t.recommendationSecondary),
+          makeItem("books", "integrative", t.recommendationIntegrative)
+        ],
+        films: [
+          makeItem("films", primaryKey, t.recommendationPrimary),
+          makeItem("films", secondaryKey, t.recommendationSecondary),
+          makeItem("films", "integrative", t.recommendationIntegrative)
+        ]
+      };
+    }
+
+    function renderRecommendationCards(items, type) {
+      const t = ui[language];
+      const creditLabel = type === "books" ? t.authorLabel : t.directorLabel;
+
+      return items.map(item => {
+        const originalTitle = language === "ja" && item.title.en !== item.title.ja
+          ? `<div class="recommendation-original">${item.title.en}</div>`
+          : "";
+        const categoryLabel = item.key === "integrative" ? "" : ` · ${categories[item.key][language]}`;
+
+        return `
+          <article class="recommendation-card">
+            <div class="recommendation-badge">${item.badge}${categoryLabel}</div>
+            <div class="recommendation-title">${item.title[language]}</div>
+            ${originalTitle}
+            <div class="recommendation-credit">${creditLabel}: ${item.creator[language]}</div>
+            <p class="recommendation-reason">${item.reason[language]}</p>
+          </article>`;
+      }).join("");
+    }
+
     function renderResults() {
       const { total, categoryScores } = calculateResults();
       const band = resultBands.find(item => total >= item.min);
@@ -1111,6 +1386,10 @@
       $("adviceText").textContent = advice.text;
       $("nextStepText").textContent = advice.nextStep;
 
+      const recommendations = buildRecommendations();
+      $("bookRecommendations").innerHTML = renderRecommendationCards(recommendations.books, "books");
+      $("filmRecommendations").innerHTML = renderRecommendationCards(recommendations.films, "films");
+
       $("answerReview").innerHTML = questions.map((q, index) => {
         const answerIndex = answers[index];
         const score = q.scores[answerIndex];
@@ -1138,6 +1417,19 @@
       });
       const advice = buildAdvice();
       lines.push("", band[language], "", t.adviceTitle, advice.text, "", `${t.nextStepLabel}: ${advice.nextStep}`);
+
+      const recommendations = buildRecommendations();
+      lines.push("", t.bookRecommendationsTitle);
+      recommendations.books.forEach((item, index) => {
+        lines.push(`${index + 1}. ${item.title[language]} — ${item.creator[language]}`);
+        lines.push(`   ${item.reason[language]}`);
+      });
+      lines.push("", t.filmRecommendationsTitle);
+      recommendations.films.forEach((item, index) => {
+        lines.push(`${index + 1}. ${item.title[language]} — ${item.creator[language]}`);
+        lines.push(`   ${item.reason[language]}`);
+      });
+      lines.push("", t.recommendationNote);
       return lines.join("\n");
     }
 
