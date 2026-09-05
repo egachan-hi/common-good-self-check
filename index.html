@@ -347,6 +347,82 @@
       line-height: 1.6;
     }
 
+    .leader-panel {
+      margin: 28px 0 24px;
+      padding: clamp(20px, 4vw, 28px);
+      border: 1px solid #d7d9c8;
+      border-radius: 18px;
+      background:
+        linear-gradient(145deg, rgba(255,250,237,.97), rgba(245,248,236,.97));
+    }
+    .leader-kicker {
+      margin-bottom: 5px;
+      color: #8b6324;
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .leader-panel > h2 { margin-bottom: 8px; font-size: clamp(23px, 5vw, 30px); }
+    .leader-intro { margin-bottom: 18px; color: var(--muted); }
+    .leader-card {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 18px;
+      border: 1px solid #e2dccb;
+      border-radius: 16px;
+      background: rgba(255,255,255,.88);
+    }
+    .leader-avatar {
+      width: 76px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 22px;
+      color: #fff;
+      background: linear-gradient(135deg, #7a5825, var(--primary));
+      box-shadow: 0 10px 22px rgba(68,67,33,.18);
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: .04em;
+    }
+    .leader-content { min-width: 0; }
+    .leader-badge {
+      display: inline-block;
+      margin-bottom: 7px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      color: #63491d;
+      background: #f4ecd9;
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .leader-name {
+      margin-bottom: 1px;
+      font-size: clamp(21px, 4.5vw, 27px);
+      font-weight: 900;
+      line-height: 1.35;
+    }
+    .leader-name-original {
+      margin-bottom: 9px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .leader-description {
+      margin: 8px 0 0;
+      color: #344039;
+      font-size: 15px;
+      line-height: 1.85;
+    }
+    .leader-note {
+      margin: 14px 2px 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+    }
+
     .recommendation-panel {
       margin: 28px 0 24px;
       padding: clamp(20px, 4vw, 28px);
@@ -508,6 +584,8 @@
       .card { padding: 21px 17px; border-radius: 18px; }
       .nav-row { grid-template-columns: .9fr 1.25fr; }
       .brand-text { display: none; }
+      .leader-card { grid-template-columns: 64px 1fr; gap: 13px; padding: 15px; }
+      .leader-avatar { width: 64px; border-radius: 18px; font-size: 19px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -581,6 +659,22 @@
           <strong id="nextStepText"></strong>
         </div>
         <p class="advice-meta" id="adviceMeta">総合点、5領域の相対的な得点、各設問への回答をもとに、端末内のルールで自動作成しています。</p>
+      </section>
+
+      <section class="leader-panel" aria-labelledby="leaderTitle">
+        <div class="leader-kicker" id="leaderKicker">Leadership role model</div>
+        <h2 id="leaderTitle">あなたが目指すリーダー像</h2>
+        <p class="leader-intro" id="leaderIntro"></p>
+        <article class="leader-card">
+          <div class="leader-avatar" id="leaderInitials" aria-hidden="true">NM</div>
+          <div class="leader-content">
+            <div class="leader-badge" id="leaderBadge"></div>
+            <div class="leader-name" id="leaderName"></div>
+            <div class="leader-name-original" id="leaderNameOriginal"></div>
+            <p class="leader-description" id="leaderDescription"></p>
+          </div>
+        </article>
+        <p class="leader-note" id="leaderNote"></p>
       </section>
 
       <section class="recommendation-panel" aria-labelledby="recommendationTitle">
@@ -807,6 +901,12 @@
         adviceTitle: "公共善的な日常生活へのアドバイス",
         nextStepLabel: "まず今週やること",
         adviceMeta: "総合点、5領域の相対的な得点、各設問への回答をもとに、端末内のルールで自動作成しています。個別の専門的助言ではなく、振り返りのための提案です。",
+        leaderKicker: "Leadership role model",
+        leaderTitle: "あなたが目指すリーダー像",
+        leaderIntro: "現在の強みと、相対的に改善余地が大きい領域の組み合わせから、参考となる人物を一人提案します。",
+        leaderGrowthBadge: "伸ばしたい領域",
+        leaderIntegrativeBadge: "5領域をつなぐリーダー",
+        leaderNote: "人物の選定と解説は原資料に含まれない本アプリ独自の参考提案です。人物全体への無条件の賛同ではなく、ここで示したリーダーシップの一側面を振り返りに活用してください。",
         recommendationKicker: "Explore further",
         recommendationTitle: "理解を深める本と映画",
         recommendationIntro: "相対的に改善余地が大きかった2領域と、公共善を統合的に考えるための作品から選んでいます。",
@@ -847,6 +947,12 @@
         adviceTitle: "Guidance for everyday common-good practice",
         nextStepLabel: "One action for this week",
         adviceMeta: "This guidance is created on your device from your total score, relative results in the five areas, and individual answers. It is a reflection prompt, not professional personal advice.",
+        leaderKicker: "Leadership role model",
+        leaderTitle: "A leadership model to learn from",
+        leaderIntro: "One public figure is suggested from the combination of your relative strength and the area with the most room for growth.",
+        leaderGrowthBadge: "Area to develop",
+        leaderIntegrativeBadge: "Connecting all five areas",
+        leaderNote: "This selection is an editorial feature of the app, not part of the original self-check. It highlights one aspect of leadership for reflection and is not an unconditional endorsement of the person as a whole.",
         recommendationKicker: "Explore further",
         recommendationTitle: "Books and films to deepen your reflection",
         recommendationIntro: "These selections reflect the two areas with the most room for growth, plus one work that connects all five common-good areas.",
@@ -973,6 +1079,64 @@
         practice: {
           ja: "民主的参加は投票だけではありません。自分の意見を持ち、異なる意見を聴き、地域や職場の意思決定に小さく関わることも実践です。",
           en: "Democratic participation is more than voting. Form a view, listen to different perspectives, and take a small role in decisions at work or in your community."
+        }
+      }
+    };
+
+
+    const leaderLibrary = {
+      dignity: {
+        initials: "NM",
+        name: { ja: "ネルソン・マンデラ", en: "Nelson Mandela" },
+        period: { ja: "現代史の人物", en: "Modern historical figure" },
+        description: {
+          ja: "長い投獄を経ても報復ではなく和解を選び、相手の尊厳を損なわずに社会を変えました。強さと寛容さを両立し、対立の中でも一人ひとりを固有の存在として扱うリーダー像です。",
+          en: "After a long imprisonment, he helped pursue democratic change and reconciliation rather than revenge. His example combines moral courage with respect for the dignity of people across deep conflict."
+        }
+      },
+      solidarity: {
+        initials: "MY",
+        name: { ja: "ムハマド・ユヌス", en: "Muhammad Yunus" },
+        period: { ja: "現代の人物", en: "Contemporary figure" },
+        description: {
+          ja: "貧困を個人の責任とせず、金融の仕組みを変えて自立の機会を広げました。善意だけに頼らず、支え合いが続く仕組みを設計し、当事者の力を引き出す連帯型リーダーの手本です。",
+          en: "He treated poverty as a problem that institutions could address and expanded access to small loans. His model shows how solidarity can be designed to support agency rather than remain a one-time act of charity."
+        }
+      },
+      ecology: {
+        initials: "WM",
+        name: { ja: "ワンガリ・マータイ", en: "Wangari Maathai" },
+        period: { ja: "現代史の人物", en: "Modern historical figure" },
+        description: {
+          ja: "植樹を環境保全だけでなく、女性の自立や地域の民主化へつなげました。身近な一歩を大きな社会変革へ育て、自然・暮らし・公正を一体として考えるリーダー像です。",
+          en: "She connected tree planting with women's empowerment, human rights, and democratic participation. Her example shows how a practical local action can grow into systemic change linking nature, livelihoods, and justice."
+        }
+      },
+      justice: {
+        initials: "MLK",
+        name: { ja: "マーティン・ルーサー・キング・ジュニア", en: "Martin Luther King Jr." },
+        period: { ja: "歴史上の人物", en: "Historical figure" },
+        description: {
+          ja: "非暴力と対話を貫き、人種差別の不公正を社会全体の課題として訴えました。怒りを希望と共同行動へ変え、相手の尊厳を守りながら公正を追求するリーダー像です。",
+          en: "He made racial injustice a shared public issue through nonviolent action and persuasive speech. His example turns anger into hope and collective action while keeping dignity and justice together."
+        }
+      },
+      democracy: {
+        initials: "AT",
+        name: { ja: "オードリー・タン（唐鳳）", en: "Audrey Tang" },
+        period: { ja: "現代の人物", en: "Contemporary figure" },
+        description: {
+          ja: "デジタル技術を、統制ではなく市民参加と対話を広げるために活用してきました。異なる意見を可視化し、透明性と協働によって納得できる意思決定をつくるリーダー像です。",
+          en: "Tang has used civic technology to widen participation, listening, and open government. The example highlights leadership that makes differences visible and builds legitimate decisions through transparency and collaboration."
+        }
+      },
+      integrative: {
+        initials: "ER",
+        name: { ja: "エレノア・ルーズベルト", en: "Eleanor Roosevelt" },
+        period: { ja: "歴史上の人物", en: "Historical figure" },
+        description: {
+          ja: "人権を抽象的な理念で終わらせず、日常の身近な場所で実現する課題として捉えました。異なる立場をつなぎ、尊厳・公正・参加を制度と暮らしへ結ぶ統合型リーダーです。",
+          en: "She helped turn universal human rights from an abstract ideal into a shared institutional commitment. Her example connects dignity, fairness, participation, and everyday responsibility across different positions."
         }
       }
     };
@@ -1156,6 +1320,10 @@
       $("adviceTitle").textContent = t.adviceTitle;
       $("nextStepLabel").textContent = t.nextStepLabel;
       $("adviceMeta").textContent = t.adviceMeta;
+      $("leaderKicker").textContent = t.leaderKicker;
+      $("leaderTitle").textContent = t.leaderTitle;
+      $("leaderIntro").textContent = t.leaderIntro;
+      $("leaderNote").textContent = t.leaderNote;
       $("recommendationKicker").textContent = t.recommendationKicker;
       $("recommendationTitle").textContent = t.recommendationTitle;
       $("recommendationIntro").textContent = t.recommendationIntro;
@@ -1307,6 +1475,37 @@
       };
     }
 
+
+    function buildLeaderProfile() {
+      const { categoryScores } = calculateResults();
+      const metrics = getCategoryMetrics(categoryScores).sort((a, b) => a.percent - b.percent);
+      const weakest = metrics[0];
+      const strongest = metrics[metrics.length - 1];
+      const spread = strongest.percent - weakest.percent;
+      const allStrong = weakest.percent >= 0.82;
+      const balanced = spread < 0.07;
+      const key = allStrong || balanced ? "integrative" : weakest.key;
+      const model = leaderLibrary[key];
+      const t = ui[language];
+
+      const badge = key === "integrative"
+        ? t.leaderIntegrativeBadge
+        : `${t.leaderGrowthBadge} · ${categories[key][language]}`;
+
+      let description;
+      if (language === "ja") {
+        description = key === "integrative"
+          ? `5領域を横断して実践を広げる参考として、${model.description.ja}`
+          : `「${categories[strongest.key].ja}」の強みを土台に「${categories[weakest.key].ja}」を育てる参考として、${model.description.ja}`;
+      } else {
+        description = key === "integrative"
+          ? `As a model for connecting all five areas, consider ${model.name.en}: ${model.description.en}`
+          : `To build on your strength in ${categories[strongest.key].en} while developing ${categories[weakest.key].en}, consider ${model.name.en}: ${model.description.en}`;
+      }
+
+      return { ...model, key, badge, description };
+    }
+
     function buildRecommendations() {
       const { categoryScores } = calculateResults();
       const metrics = getCategoryMetrics(categoryScores).sort((a, b) => a.percent - b.percent);
@@ -1386,6 +1585,14 @@
       $("adviceText").textContent = advice.text;
       $("nextStepText").textContent = advice.nextStep;
 
+      const leader = buildLeaderProfile();
+      $("leaderInitials").textContent = leader.initials;
+      $("leaderBadge").textContent = `${leader.period[language]} · ${leader.badge}`;
+      $("leaderName").textContent = leader.name[language];
+      $("leaderNameOriginal").textContent = language === "ja" ? leader.name.en : "";
+      $("leaderNameOriginal").classList.toggle("hidden", language !== "ja");
+      $("leaderDescription").textContent = leader.description;
+
       const recommendations = buildRecommendations();
       $("bookRecommendations").innerHTML = renderRecommendationCards(recommendations.books, "books");
       $("filmRecommendations").innerHTML = renderRecommendationCards(recommendations.films, "films");
@@ -1417,6 +1624,9 @@
       });
       const advice = buildAdvice();
       lines.push("", band[language], "", t.adviceTitle, advice.text, "", `${t.nextStepLabel}: ${advice.nextStep}`);
+
+      const leader = buildLeaderProfile();
+      lines.push("", t.leaderTitle, `${leader.name[language]}（${leader.period[language]}）`, leader.description, "", t.leaderNote);
 
       const recommendations = buildRecommendations();
       lines.push("", t.bookRecommendationsTitle);
